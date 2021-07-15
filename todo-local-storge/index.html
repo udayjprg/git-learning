@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Todo Tracker</title>
+    </head>
+    <body>
+        <h1 id="title" >Todo Tracker</h1>
+        <form >
+            <input type="text" id="user-todo" placeholder="New Todo" required>
+        </form>
+        <h2 id="todo-header" >Todos</h2>
+        <ul>
+
+        </ul>
+        <button id="clear" >Clear All</button>
+        
+    </body>
+    
+    <script>
+                // STEP 1: create variables for Form, Input, Button, todoList
+            var formField=document.querySelector('form');
+            var todoList=document.querySelector('ul');
+            var button=document.querySelector('button');
+            var input=document.getElementById('user-todo');
+
+            var todosArray=localStorage.getItem('todo')? JSON.parse(localStorage.getItem('todo')): [];    
+            localStorage.setItem('todo', JSON.stringify(todosArray));
+
+            var storage=JSON.parse(localStorage.getItem('todo'));
+           
+                 //STEP 2:  Attach an eventListener to the 'form' 
+                 //variable with addEventListener which will capture the input value
+                //  from the user input at the submit event.
+
+            formField.addEventListener('submit', function(e){ 
+                e.preventDefault();
+                todosArray.push(input.value);
+                localStorage.setItem('todo', JSON.stringify(todosArray));
+                todoMaker(input.value);
+                input.value=''; // user input value will be erased after submit
+            });
+
+            //STEP 3: Create a 'todoMaker' function whihc creates an 'li' element
+            // that prpvides by the user input and then append it to the 'ul'.
+
+            var todoMaker=function(text){
+                var todo=document.createElement('li');
+                todo.textContent=text;
+                todoList.appendChild(todo);
+            }
+            for(var i=0; i< storage.length; i++){
+                    todoMaker(storage[i]);
+            }
+
+            // STEP 4: add eventListener to button to clear all'li' elemnts linked with 'ul'
+
+            button.addEventListener('click', function(){
+                while(todoList.firstChild){
+                    todoList.removeChild(todoList.firstChild);
+                }
+            });
+
+
+
+
+    </script>
+</html>
